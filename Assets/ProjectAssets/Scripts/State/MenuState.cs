@@ -6,7 +6,7 @@ namespace ReDrawer
 {
 	public class MenuState : StateBase
 	{
-		public MenuState(ViewBase view) : base(view)
+		public MenuState() : base(Approot.Instance.SceneLoader.Scenes.Find(scene => scene.SceneName == "Menu").SceneName)
 		{
 
 		}

@@ -6,7 +6,7 @@ namespace ReDrawer
 {
 	public class GameOverState : StateBase
 	{
-		public GameOverState(ViewBase view) : base(view)
+		public GameOverState() : base(Approot.Instance.SceneLoader.Scenes.Find(scene => scene.SceneName == "GameOver").SceneName)
 		{
 
 		}

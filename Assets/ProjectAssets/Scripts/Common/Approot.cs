@@ -17,5 +17,10 @@ namespace ReDrawer
 		{
 			_instance = this;
 		}
+
+		private void Start()
+		{
+			SetState(new MenuState());
+		}
 	}
 }

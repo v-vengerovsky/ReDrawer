@@ -6,7 +6,7 @@ namespace ReDrawer
 {
 	public class PlayState : StateBase
 	{
-		public PlayState(ViewBase view) : base(view)
+		public PlayState() : base(Approot.Instance.SceneLoader.Scenes.Find(scene => scene.SceneName == "Play").SceneName)
 		{
 
 		}
