@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameWorld : MonoBehaviour {
+public class GameWorld
+{
+	public GameWorld()
+	{
 
-	// Use this for initialization
-	void Start () {
-		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public void Update()
+	{
+
 	}
 }
