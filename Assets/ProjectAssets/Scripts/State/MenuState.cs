@@ -13,6 +13,18 @@ namespace ReDrawer
 
 		}
 
+		public override void OnActivate()
+		{
+			base.OnActivate();
+			_view.OnStartPressed += StartGame;
+		}
+
+		public override void OnDeactivate()
+		{
+			base.OnDeactivate();
+			_view.OnStartPressed -= StartGame;
+		}
+
 		public override ViewBase GetView()
 		{
 			_view = UiRoot.GetView<MenuView>();
@@ -23,6 +35,11 @@ namespace ReDrawer
 		{
 			base.Update();
 
+		}
+
+		private void StartGame()
+		{
+			Approot.Instance.PushState(new PlayState());
 		}
 	}
 }
