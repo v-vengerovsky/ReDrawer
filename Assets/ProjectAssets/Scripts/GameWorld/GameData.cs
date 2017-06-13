@@ -2,40 +2,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameData : MonoBehaviour
+namespace ReDrawer
 {
-	[SerializeField]
-	private LineRenderer _originalFigure;
-	[SerializeField]
-	private LineRenderer _userFigure;
-
-	public List<Vector3> OriginalPoints
+	public class GameData : MonoBehaviour
 	{
-		get
-		{
-			Vector3[] points = null;
-			_originalFigure.GetPositions(points);
-			List<Vector3> result = new List<Vector3>(points);
-			return result;
-		}
-		set
-		{
-			_originalFigure.SetPositions(value.ToArray());
-		}
-	}
+		[SerializeField]
+		private LineRenderer _originalFigure;
+		[SerializeField]
+		private LineRenderer _userFigure;
 
-	public List<Vector3> UserPoints
-	{
-		get
+		private static GameData _instance;
+
+		public static GameData Instance
 		{
-			Vector3[] points = null;
-			_userFigure.GetPositions(points);
-			List<Vector3> result = new List<Vector3>(points);
-			return result;
+			get { return _instance; }
 		}
-		set
+
+		public List<Vector3> OriginalPoints
 		{
-			_userFigure.SetPositions(value.ToArray());
+			get
+			{
+				Vector3[] points = null;
+				_originalFigure.GetPositions(points);
+				List<Vector3> result = new List<Vector3>(points);
+				return result;
+			}
+			set
+			{
+				_originalFigure.SetPositions(value.ToArray());
+			}
+		}
+
+		public List<Vector3> UserPoints
+		{
+			get
+			{
+				Vector3[] points = null;
+				_userFigure.GetPositions(points);
+				List<Vector3> result = new List<Vector3>(points);
+				return result;
+			}
+			set
+			{
+				_userFigure.SetPositions(value.ToArray());
+			}
+		}
+
+		private void Awake()
+		{
+			_instance = this;
 		}
 	}
 }

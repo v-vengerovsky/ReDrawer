@@ -51,7 +51,10 @@ public class SceneLoader : MonoBehaviour
 #if UNITY_EDITOR
 	private static void EditorUpdateStatic()
 	{
-		_instance.EditorUpdate();
+		if (_instance != null)
+		{
+			_instance.EditorUpdate();
+		}
 	}
 
 	private void EditorUpdate()

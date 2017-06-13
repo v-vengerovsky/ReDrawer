@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameWorld
+namespace ReDrawer
 {
-	public GameWorld()
+	public class GameWorld
 	{
+		private GameData _data;
+		private FigureLoader _figureLoader;
 
-	}
+		public GameWorld(GameData data)
+		{
+			_data = data;
+		}
 
-	public void Update()
-	{
+		public void Update()
+		{
 
+		}
 	}
 }

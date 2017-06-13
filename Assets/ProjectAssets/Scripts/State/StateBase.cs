@@ -7,6 +7,7 @@ namespace ReDrawer
 	public abstract class StateBase
 	{
 		private string _sceneName;
+		private ViewBase _viewBase;
 
 		public string SceneName
 		{
@@ -20,12 +21,17 @@ namespace ReDrawer
 
 		public virtual void OnActivate()
 		{
-
+			_viewBase = GetView();
 		}
 
 		public virtual void OnDeactivate()
 		{
 
+		}
+
+		public virtual ViewBase GetView()
+		{
+			return null;
 		}
 
 		public virtual void Update()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ReDrawer
 {
-	public class ViewBase : MonoBehaviour
+	public abstract class ViewBase : MonoBehaviour
 	{
 
 	}
