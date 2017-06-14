@@ -13,12 +13,22 @@ namespace ReDrawer
 
 		//names
 		private const string _addPointButtonName = "Add Point";
+		private const string _saveFigureButtonName = "Save figure";
+		private const string _resetFigureButtonName = "Reset figure";
+		private const string _removePointButtonName = "-";
 
 		//size
-		private static readonly Vector2 _windowSize = new Vector2(500, _figureHeight + _pointlistHeight + _nameHeight);
-		private const float _figureHeight = 500f - _nameHeight;
+		private static readonly Vector2 _maxWindowSize = new Vector2(500, _figureHeight + _pointlistHeight + _headerHeight);
+		private static readonly Vector2 _minWindowSize = new Vector2(500, _figureHeight + _headerHeight);
+		private const float _figureHeight = 500f - _headerHeight;
 		private const float _pointlistHeight = 500f;
-		private const float _nameHeight = 30f;
+		private const float _headerHeight = 50f;
+
+		//position
+		private static readonly Vector2 _scrollStartPos = new Vector2(0, _figureHeight + _headerHeight);
+
+		//auxiliary data
+		private Vector2 _scrollPos;
 
 		//figure image
 		private Texture _figureImage;
@@ -41,31 +51,53 @@ namespace ReDrawer
 			}
 
 			_instance.Show();
-			_instance.minSize = _windowSize;
-			_instance.maxSize = _windowSize;
+			_instance.minSize = _minWindowSize;
+			_instance.maxSize = _maxWindowSize;
 			_instance._figureImage = _instance.GenerateTexture(_instance._points, _instance.position.width, _figureHeight);
 		}
 
 		private void OnGUI()
 		{
 			_figureName = EditorGUILayout.TextField("Name",_figureName);
-			//GUIStyle buttonStyle = GUI.skin.button;
-			//buttonStyle.fixedWidth = 20;
-			////buttonStyle.fixedHeight = 20;
-			//if (GUILayout.Button(""))
-			//{
-			//	Debug.LogWarning("ButtonPressed");
-			//}
+
+			GUILayout.BeginHorizontal();
+			if (GUILayout.Button(_saveFigureButtonName))
+			{
+				SaveFigure();
+			}
+			if (GUILayout.Button(_resetFigureButtonName))
+			{
+				ResetFigure();
+			}
+			GUILayout.EndHorizontal();
 
 			if (_oldPointsCount != _points.Count)
 			{
 				_figureImage = GenerateTexture(_points,position.width, _figureHeight);
 			}
+
 			_oldPointsCount = _points.Count;
-			Rect figureImageRect = new Rect(0, _nameHeight, position.width, _figureHeight);
+			Rect figureImageRect = new Rect(0, _headerHeight, position.width, _figureHeight);
 			EditorGUI.DrawTextureTransparent(figureImageRect, _figureImage);
 
-			//Debug.LogWarning(string.Format("clickCount:{0} type:{1} keyCode:{2} mousePos:{3}", Event.current.clickCount, Event.current.type, Event.current.keyCode, Event.current.mousePosition));
+			GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
+			GUIStyle scrollViewStyle = new GUIStyle(GUI.skin.scrollView);
+			//scrollViewStyle.contentOffset = _scrollStartPos;
+			scrollViewStyle.margin = new RectOffset(1,1, (int)(_figureHeight + _headerHeight), 1);
+
+			_scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, scrollViewStyle);
+			for (int i = 0; i < _points.Count; i++)
+			{
+				GUILayout.BeginHorizontal();
+				EditorGUILayout.TextArea(string.Format("point {0} : {1}", i, _points[i]));
+
+				if (GUILayout.Button(_removePointButtonName,buttonStyle,new GUILayoutOption[] {GUILayout.Width(50) }))
+				{
+					RemovePointAtIndex(i);
+				}
+				GUILayout.EndHorizontal();
+			}
+			EditorGUILayout.EndScrollView();
 
 			switch (Event.current.type)
 			{
@@ -81,8 +113,6 @@ namespace ReDrawer
 			int height = (int)heightF;
 			Texture2D image = new Texture2D(width, height);
 
-			//image.SetPixels(0,0,width,height,new Color[] { Color.white });
-
 			for (int i = 0; i < width; i++)
 			{
 				for (int j = 0; j < height; j++)
@@ -93,13 +123,37 @@ namespace ReDrawer
 
 			for (int t = 0; t < points.Count - 1; t++)
 			{
-				image.SetPixel((int)points[t].x, (int)points[t].y, Color.black);
-				Debug.LogWarning(points[t]);
+				DrawSegment(image, points[t], points[t+1], Color.black);
+			}
+
+			if (points.Count > 2)
+			{
+				DrawSegment(image, points[points.Count - 1], points[0], Color.black);
 			}
 
 			image.Apply();
 
 			return image;
+		}
+
+		private void DrawSegment(Texture2D tex, Vector3 start, Vector3 end, Color color)
+		{
+			float distance = Vector3.Distance(start, end);
+			float angle = Vector3.Angle(Vector3.right, end - start);
+			Vector3 segment = end - start;
+			int steps = Mathf.RoundToInt(Mathf.Max( Mathf.Abs(segment.x ), Mathf.Abs(segment.y)));
+
+			if (segment.y < 0)
+			{
+				angle = 360 - Vector3.Angle(Vector3.right, end - start);
+			}
+
+			for (int i = 0; i < steps; i++)
+			{
+				float x = (float)i / steps * segment.x + start.x;
+				float y = (float)i / steps * segment.y + start.y;
+				tex.SetPixel((int)x, (int)y, color);
+			}
 		}
 
 		private void PlacePoint(Vector2 point, Rect figureImageRect)
@@ -114,7 +168,18 @@ namespace ReDrawer
 			}
 		}
 
+		private void ResetFigure()
+		{
+			_figureName = string.Empty;
+			_points.Clear();
+		}
+
 		private void SaveFigure()
+		{
+
+		}
+
+		private void RemovePointAtIndex(int index)
 		{
 
 		}
