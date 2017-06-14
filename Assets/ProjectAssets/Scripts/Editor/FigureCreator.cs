@@ -82,7 +82,6 @@ namespace ReDrawer
 
 			GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
 			GUIStyle scrollViewStyle = new GUIStyle(GUI.skin.scrollView);
-			//scrollViewStyle.contentOffset = _scrollStartPos;
 			scrollViewStyle.margin = new RectOffset(1,1, (int)(_figureHeight + _headerHeight), 1);
 
 			_scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, scrollViewStyle);
@@ -176,12 +175,28 @@ namespace ReDrawer
 
 		private void SaveFigure()
 		{
+			if (string.IsNullOrEmpty(_figureName) || _points.Count < 2)
+			{
+				return;
+			}
 
+			Figure figure = new Figure(_figureName, _points);
+			string serializedFigure = JsonUtility.ToJson(figure, true);
+			string projectFolder = System.IO.Directory.GetParent(Application.dataPath).FullName;
+			string folderPath = string.Format("{0}/{1}", projectFolder, Constants.FiguresSubpath);
+			string filePath = string.Format("{0}/{1}{2}", folderPath, _figureName, Constants.JsonExt);
+
+			if (!System.IO.Directory.Exists(folderPath))
+			{
+				System.IO.Directory.CreateDirectory(folderPath);
+			}
+
+			System.IO.File.WriteAllText(filePath, serializedFigure);
 		}
 
 		private void RemovePointAtIndex(int index)
 		{
-
+			_points.RemoveAt(index);
 		}
 	}
 }

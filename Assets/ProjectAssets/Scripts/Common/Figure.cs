@@ -9,7 +9,9 @@ namespace ReDrawer
 	[Serializable]
 	public class Figure
 	{
+		[SerializeField]
 		private string _name;
+		[SerializeField]
 		private List<Vector3> _points;
 
 		public string Name
