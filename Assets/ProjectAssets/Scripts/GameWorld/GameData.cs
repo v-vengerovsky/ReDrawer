@@ -25,7 +25,7 @@ namespace ReDrawer
 		{
 			get
 			{
-				Vector3[] points = null;
+				Vector3[] points = new Vector3[_originalFigure.positionCount];
 				_originalFigure.GetPositions(points);
 				List<Vector3> result = new List<Vector3>(points);
 				return result;
