@@ -18,6 +18,13 @@ namespace ReDrawer
 		{
 			base.OnActivate();
 			_gameWorld = new GameWorld(GameData.Instance);
+			_view.OnDrag += _gameWorld.Input;
+		}
+
+		public override void OnDeactivate()
+		{
+			base.OnDeactivate();
+			_view.OnDrag -= _gameWorld.Input;
 		}
 
 		public override ViewBase GetView()

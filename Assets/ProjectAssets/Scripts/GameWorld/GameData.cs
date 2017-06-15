@@ -18,6 +18,9 @@ namespace ReDrawer
 			get { return _instance; }
 		}
 
+		public GameObject OriginalFigureGO { get { return _originalFigure.gameObject; } }
+		public GameObject UserFigureGO { get { return _userFigure.gameObject; } }
+
 		public List<Vector3> OriginalPoints
 		{
 			get

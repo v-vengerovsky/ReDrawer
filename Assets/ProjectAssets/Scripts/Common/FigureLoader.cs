@@ -15,14 +15,11 @@ namespace ReDrawer
 
 			foreach (var item in textAssets)
 			{
-				if (item.name.Contains(Constants.JsonExt))
-				{
-					Figure figureItem = JsonUtility.FromJson<Figure>(item.text);
+				Figure figureItem = JsonUtility.FromJson<Figure>(item.text);
 
-					if (figureItem != null)
-					{
-						result.Add(figureItem);
-					}
+				if (figureItem != null)
+				{
+					result.Add(figureItem);
 				}
 			}
 
