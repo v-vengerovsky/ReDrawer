@@ -163,13 +163,13 @@ namespace ReDrawer
 		private void DrawSegment(Texture2D tex, Vector3 start, Vector3 end, Color color)
 		{
 			float distance = Vector3.Distance(start, end);
-			float angle = Vector3.Angle(Vector3.right, end - start);
 			Vector3 segment = end - start;
+			float angle = Vector3.Angle(Vector3.right, segment);
 			int steps = Mathf.RoundToInt(Mathf.Max( Mathf.Abs(segment.x ), Mathf.Abs(segment.y)));
 
 			if (segment.y < 0)
 			{
-				angle = 360 - Vector3.Angle(Vector3.right, end - start);
+				angle = 360 - angle;
 			}
 
 			for (int i = 0; i < steps; i++)

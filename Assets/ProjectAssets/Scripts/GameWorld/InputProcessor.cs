@@ -96,8 +96,15 @@ namespace ReDrawer
 
 			foreach (var item in _points)
 			{
-				for (int i = 0; i < originalPoints.Count - 1; i++)
+				for (int i = 0; i < originalPoints.Count - 2; i++)
 				{
+					Vector3 segment = originalPoints[i] - originalPoints[i + 1];
+					angle = Vector3.Angle(Vector3.right, segment);
+
+					if (segment.y < 0)
+					{
+						angle = 360 - angle;
+					}
 
 				}
 			}
