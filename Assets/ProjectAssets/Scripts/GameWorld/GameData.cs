@@ -32,6 +32,7 @@ namespace ReDrawer
 			}
 			set
 			{
+				_originalFigure.positionCount = value.Count;
 				_originalFigure.SetPositions(value.ToArray());
 			}
 		}

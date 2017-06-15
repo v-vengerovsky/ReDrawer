@@ -8,7 +8,21 @@ namespace ReDrawer
 {
 	public class FigureProcessor
 	{
-		public List<Vector3> GetScaledFigurePoints(Figure figure, float screenWidth, float screenHeight, float screenOffset)
+		private GameData _gamedata;
+		private ScreenSettings _screenSettings;
+
+		public FigureProcessor(GameData gamedata)
+		{
+			_gamedata = gamedata;
+			_screenSettings = new ScreenSettings(Camera.main, _gamedata.OriginalFigureGO);
+		}
+
+		public void ShowFigureToDraw(Figure figure)
+		{
+			_gamedata.OriginalPoints = GetScaledFigurePoints(figure,_screenSettings);
+		}
+
+		private List<Vector3> GetScaledFigurePoints(Figure figure, ScreenSettings screenSettings)
 		{
 			List<Vector3> points = new List<Vector3>();
 
@@ -34,15 +48,14 @@ namespace ReDrawer
 					minY = item.y;
 				}
 
-				if (item.y > minY)
+				if (item.y > maxY)
 				{
 					maxY = item.y;
 				}
 			}
 
-
-			float width = screenWidth - 2 * screenOffset;
-			float height = screenHeight - 2 * screenOffset;
+			float width = screenSettings.ScreenWidth - 2 * screenSettings.ScreenOffset;
+			float height = screenSettings.ScreenHeight - 2 * screenSettings.ScreenOffset;
 			float halfWidth = width / 2;
 			float halfHeight = height / 2;
 			float rangeX = maxX - minX;
@@ -57,23 +70,21 @@ namespace ReDrawer
 
 			if (figureRatio > screenRatio)
 			{
-
+				yCoef *= screenRatio / figureRatio;
+				halfHeight *= screenRatio / figureRatio;
 			}
 			else
 			{
-				//xCoef = 1f / screenRatio;
+				xCoef *= figureRatio / screenRatio;
+				halfWidth *= figureRatio / screenRatio;
 			}
 
 			Vector3 temp;
 			for (int i = 0; i < figure.Points.Count; i++)
 			{
 				temp = figure.Points[i];
-				//temp.x = (temp.x - xOffset) * xCoef;
-				//temp.y = (temp.y - xOffset) * yCoef;
 				temp.x = ((temp.x - xOffset) * xCoef) - halfWidth;
 				temp.y = ((temp.y - yOffset) * yCoef) - halfHeight;
-				//temp.x = (temp.x ) * xCoef - (screenWidth / 2 - screenOffset);
-				//temp.y = (temp.y ) * yCoef - (screenHeight / 2 - screenOffset);
 				points.Add(temp);
 			}
 

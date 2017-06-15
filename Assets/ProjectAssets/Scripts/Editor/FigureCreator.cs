@@ -16,13 +16,18 @@ namespace ReDrawer
 		private const string _saveFigureButtonName = "Save figure";
 		private const string _resetFigureButtonName = "Reset figure";
 		private const string _removePointButtonName = "-";
+		private const string _loadFileFieldName = "Load File";
+		private const string _nameFieldName = "Figure name";
+
+		//info
+		private const string _pointInfoFormat = "point {0} : {1}";
 
 		//size
 		private static readonly Vector2 _maxWindowSize = new Vector2(500, _figureHeight + _pointlistHeight + _headerHeight);
 		private static readonly Vector2 _minWindowSize = new Vector2(500, _figureHeight + _headerHeight);
 		private const float _figureHeight = 500f - _headerHeight;
 		private const float _pointlistHeight = 500f;
-		private const float _headerHeight = 50f;
+		private const float _headerHeight = 70f;
 
 		//position
 		private static readonly Vector2 _scrollStartPos = new Vector2(0, _figureHeight + _headerHeight);
@@ -39,6 +44,9 @@ namespace ReDrawer
 		//aux figure data
 		private int _oldPointsCount;
 
+		//file to load
+		private UnityEngine.Object _textAsset;
+
 		private static FigureCreator _instance;
 
 		[MenuItem("Figure/Create")]
@@ -53,12 +61,29 @@ namespace ReDrawer
 			_instance.Show();
 			_instance.minSize = _minWindowSize;
 			_instance.maxSize = _maxWindowSize;
-			_instance._figureImage = _instance.GenerateTexture(_instance._points, _instance.position.width, _figureHeight);
+
+			if (_instance._figureImage == null)
+			{
+				_instance._figureImage = _instance.GenerateTexture(_instance._points, _instance.position.width, _figureHeight);
+			}
 		}
 
 		private void OnGUI()
 		{
-			_figureName = EditorGUILayout.TextField("Name",_figureName);
+			_textAsset = EditorGUILayout.ObjectField(_loadFileFieldName, _textAsset,typeof(TextAsset));
+
+			if (_textAsset != null)
+			{
+				Figure figure = JsonUtility.FromJson<Figure>((_textAsset as TextAsset).text);
+
+				if (figure != null)
+				{
+					_figureName = figure.Name;
+					_points = figure.Points;
+				}
+			}
+
+			_figureName = EditorGUILayout.TextField(_nameFieldName, _figureName);
 
 			GUILayout.BeginHorizontal();
 			if (GUILayout.Button(_saveFigureButtonName))
@@ -71,7 +96,7 @@ namespace ReDrawer
 			}
 			GUILayout.EndHorizontal();
 
-			if (_oldPointsCount != _points.Count)
+			if (_oldPointsCount != _points.Count || _figureImage.IsMissingReference())
 			{
 				_figureImage = GenerateTexture(_points,position.width, _figureHeight);
 			}
@@ -88,7 +113,7 @@ namespace ReDrawer
 			for (int i = 0; i < _points.Count; i++)
 			{
 				GUILayout.BeginHorizontal();
-				EditorGUILayout.TextArea(string.Format("point {0} : {1}", i, _points[i]));
+				EditorGUILayout.TextArea(string.Format(_pointInfoFormat, i, _points[i]));
 
 				if (GUILayout.Button(_removePointButtonName,buttonStyle,new GUILayoutOption[] {GUILayout.Width(50) }))
 				{
@@ -171,6 +196,7 @@ namespace ReDrawer
 		{
 			_figureName = string.Empty;
 			_points.Clear();
+			_textAsset = null;
 		}
 
 		private void SaveFigure()
@@ -192,6 +218,7 @@ namespace ReDrawer
 			}
 
 			System.IO.File.WriteAllText(filePath, serializedFigure);
+			AssetDatabase.Refresh();
 		}
 
 		private void RemovePointAtIndex(int index)

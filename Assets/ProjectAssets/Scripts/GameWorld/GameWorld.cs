@@ -7,20 +7,19 @@ namespace ReDrawer
 {
 	public class GameWorld
 	{
-		private GameData _data;
+		private GameData _gameData;
 		private FigureLoader _figureLoader;
 		private InputProcessor _inputProcessor;
 		private FigureProcessor _figureProcessor;
-		private ScreenSettings _screenSettings;
 		private List<Figure> _figures;
 
-		public GameWorld(GameData data)
+		public GameWorld(GameData gameData)
 		{
-			_data = data;
+			_gameData = gameData;
 			_figureLoader = new FigureLoader();
 			_figures = _figureLoader.LoadFigures();
-			_screenSettings = new ScreenSettings(Camera.main, _data.OriginalFigureGO);
-			_figureProcessor = new FigureProcessor();
+			_figureProcessor = new FigureProcessor(_gameData);
+			_inputProcessor = new InputProcessor(_gameData);
 			ShowRandomFigure();
 		}
 
@@ -42,7 +41,7 @@ namespace ReDrawer
 			}
 
 			int index = Random.Range(0, _figures.Count - 1);
-			_data.OriginalPoints = _figureProcessor.GetScaledFigurePoints(_figures[index],_screenSettings.ScreenWidth,_screenSettings.ScreenHeight,_screenSettings.ScreenOffset);
+			_figureProcessor.ShowFigureToDraw(_figures[index]);
 		}
 	}
 }
