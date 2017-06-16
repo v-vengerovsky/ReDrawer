@@ -8,6 +8,9 @@ namespace ReDrawer
 	{
 		private string _sceneName;
 		private ViewBase _viewBase;
+		private bool _activated = false;
+
+		public bool Activated { get { return _activated; } }
 
 		public string SceneName
 		{
@@ -22,11 +25,12 @@ namespace ReDrawer
 		public virtual void OnActivate()
 		{
 			_viewBase = GetView();
+			_activated = true;
 		}
 
 		public virtual void OnDeactivate()
 		{
-
+			_activated = false;
 		}
 
 		public virtual ViewBase GetView()

@@ -22,5 +22,13 @@ namespace ReDrawer
 		{
 			SetState(new MenuState());
 		}
+
+		private void Update()
+		{
+			if (_currentState.Activated)
+			{
+				_currentState.Update();
+			}
+		}
 	}
 }
