@@ -37,6 +37,11 @@ namespace ReDrawer
 			remove { _onDrag -= value; }
 		}
 
+		public void SetScore(int score)
+		{
+			Score = score;
+		}
+
 		private void Awake()
 		{
 			Score = 0;

@@ -19,6 +19,7 @@ namespace ReDrawer
 			base.OnActivate();
 			_gameWorld = new GameWorld(GameData.Instance);
 			_view.OnDrag += _gameWorld.Input;
+			_gameWorld.OnScore += _view.SetScore;
 		}
 
 		public override void OnDeactivate()

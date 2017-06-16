@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,7 +12,14 @@ namespace ReDrawer
 		private FigureLoader _figureLoader;
 		private InputProcessor _inputProcessor;
 		private FigureProcessor _figureProcessor;
+		private ScoreSystem _scoreSysytem;
 		private List<Figure> _figures;
+
+		public event Action<int> OnScore
+		{
+			add { _scoreSysytem.OnScore += value; }
+			remove { _scoreSysytem.OnScore -= value; }
+		}
 
 		public GameWorld(GameData gameData)
 		{
@@ -19,8 +27,11 @@ namespace ReDrawer
 			_figureLoader = new FigureLoader();
 			_figures = _figureLoader.LoadFigures();
 			_figureProcessor = new FigureProcessor(_gameData);
+			_scoreSysytem = new ScoreSystem();
+			_scoreSysytem.OnLoose += Lost;
 			_inputProcessor = new InputProcessor(_gameData);
 			_inputProcessor.OnScored += ScoredFigure;
+			_inputProcessor.OnScored += _scoreSysytem.ScoreFigure;
 			_inputProcessor.OnFailed += FailedToScoreFigure;
 			ShowRandomFigure();
 		}
@@ -33,17 +44,22 @@ namespace ReDrawer
 		public void Update()
 		{
 			_inputProcessor.Update();
+			_scoreSysytem.Update();
 		}
 
 		private void ScoredFigure()
 		{
 			ShowRandomFigure();
-			Debug.LogWarning("ScoreFigure");
 		}
 
 		private void FailedToScoreFigure()
 		{
-			Debug.LogWarning("FailedToScoreFigure");
+
+		}
+
+		private void Lost()
+		{
+			Approot.Instance.SetState(new GameOverState());
 		}
 
 		private void ShowRandomFigure()
@@ -53,7 +69,7 @@ namespace ReDrawer
 				return;
 			}
 
-			int index = Random.Range(0, _figures.Count - 1);
+			int index = UnityEngine.Random.Range(0, _figures.Count);
 			_figureProcessor.ShowFigureToDraw(_figures[index]);
 		}
 	}

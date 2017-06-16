@@ -17,5 +17,9 @@ namespace ReDrawer
 		public const float InputMaxDistanceToFigure = 1f;
 		public const float MinDistance = 100f;
 		public const float MaxCloseDistance = 50f;
+
+		//score system
+		public const float StartFigureTime = 10f;
+		public const float FigureTimeDecrement = 0.5f;
 	}
 }

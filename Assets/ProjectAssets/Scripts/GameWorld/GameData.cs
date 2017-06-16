@@ -10,12 +10,24 @@ namespace ReDrawer
 		private LineRenderer _originalFigure;
 		[SerializeField]
 		private LineRenderer _userFigure;
+		[SerializeField]
+		private GameObject _userInputMarker;
 
 		private static GameData _instance;
+
+		private Vector3 _targetForInputMarker;
 
 		public static GameData Instance
 		{
 			get { return _instance; }
+		}
+
+		public Vector3 TargetForInputMarker
+		{
+			//get { return _targetForInputMarker; }
+			//set { _targetForInputMarker = value; }
+			get { return _userInputMarker.transform.position; }
+			set { _userInputMarker.transform.position = value; }
 		}
 
 		public GameObject OriginalFigureGO { get { return _originalFigure.gameObject; } }
