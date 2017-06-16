@@ -41,9 +41,13 @@ namespace ReDrawer
 			_inputProcessor.ProcessInput(data);
 		}
 
+		public void EndInput(BaseEventData data)
+		{
+			_inputProcessor.EndInput();
+		}
+
 		public void Update()
 		{
-			_inputProcessor.Update();
 			_scoreSysytem.Update();
 		}
 
@@ -59,7 +63,7 @@ namespace ReDrawer
 
 		private void Lost()
 		{
-			Approot.Instance.SetState(new GameOverState());
+			Approot.Instance.SetState(new GameOverState(_scoreSysytem.Score));
 		}
 
 		private void ShowRandomFigure()

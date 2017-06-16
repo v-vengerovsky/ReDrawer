@@ -16,6 +16,7 @@ namespace ReDrawer
 		[SerializeField]
 		private EventTrigger _trigger;
 		private event Action<BaseEventData> _onDrag;
+		private event Action<BaseEventData> _onPointerUp;
 
 		public int Score
 		{
@@ -37,6 +38,12 @@ namespace ReDrawer
 			remove { _onDrag -= value; }
 		}
 
+		public event Action<BaseEventData> OnPointerUp
+		{
+			add { _onPointerUp += value; }
+			remove { _onPointerUp -= value; }
+		}
+
 		public void SetScore(int score)
 		{
 			Score = score;
@@ -51,14 +58,27 @@ namespace ReDrawer
 			entry.callback = new EventTrigger.TriggerEvent();
 			entry.callback.AddListener(Drag);
 			_trigger.triggers.Add(entry);
+
+			entry = new EventTrigger.Entry();
+			entry.eventID = EventTriggerType.PointerUp;
+			entry.callback = new EventTrigger.TriggerEvent();
+			entry.callback.AddListener(PointerUp);
+			_trigger.triggers.Add(entry);
 		}
 
 		private void Drag(BaseEventData data)
 		{
-			//Debug.LogWarningFormat("Drag {0}",data);
 			if (_onDrag != null)
 			{
 				_onDrag.Invoke(data);
+			}
+		}
+
+		private void PointerUp(BaseEventData data)
+		{
+			if (_onPointerUp != null)
+			{
+				_onPointerUp.Invoke(data);
 			}
 		}
 

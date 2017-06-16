@@ -19,7 +19,11 @@ namespace ReDrawer
 		public const float MaxCloseDistance = 50f;
 
 		//score system
-		public const float StartFigureTime = 10f;
+		//public const float StartFigureTime = 10f;
+		public const float StartFigureTime = 100000f;
 		public const float FigureTimeDecrement = 0.5f;
+
+		//formats
+		public const string ScoreFormat = "Score: {0}";
 	}
 }

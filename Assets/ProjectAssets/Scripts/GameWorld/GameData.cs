@@ -11,23 +11,50 @@ namespace ReDrawer
 		[SerializeField]
 		private LineRenderer _userFigure;
 		[SerializeField]
-		private GameObject _userInputMarker;
+		private ParticleSystem _userInputMarkerPrefab;
+
+		private ParticleSystem _userInputMarker;
+		private List<ParticleSystem> _usedInputMarkers = new List<ParticleSystem>();
 
 		private static GameData _instance;
-
-		private Vector3 _targetForInputMarker;
 
 		public static GameData Instance
 		{
 			get { return _instance; }
 		}
 
-		public Vector3 TargetForInputMarker
+		public Vector3 InputMarkerPosition
 		{
-			//get { return _targetForInputMarker; }
-			//set { _targetForInputMarker = value; }
 			get { return _userInputMarker.transform.position; }
 			set { _userInputMarker.transform.position = value; }
+		}
+
+		public bool ShowMarker
+		{
+			get { return _userInputMarker.isPlaying; }
+			set
+			{
+				if (value)
+				{
+					_userInputMarker.Play();
+				}
+				else
+				{
+					_userInputMarker.Stop();
+					_usedInputMarkers.Add(_userInputMarker);
+					_userInputMarker = Instantiate<ParticleSystem>(_userInputMarkerPrefab);
+					_userInputMarker.Stop();
+
+					for (int i = _usedInputMarkers.Count - 1; i >= 0; i--)
+					{
+						if (_usedInputMarkers[i].isStopped)
+						{
+							Destroy(_usedInputMarkers[i].gameObject);
+							_usedInputMarkers.RemoveAt(i);
+						}
+					}
+				}
+			}
 		}
 
 		public GameObject OriginalFigureGO { get { return _originalFigure.gameObject; } }
@@ -68,6 +95,8 @@ namespace ReDrawer
 		private void Awake()
 		{
 			_instance = this;
+			_userInputMarker = Instantiate<ParticleSystem>(_userInputMarkerPrefab);
+			_userInputMarker.Stop();
 		}
 	}
 }

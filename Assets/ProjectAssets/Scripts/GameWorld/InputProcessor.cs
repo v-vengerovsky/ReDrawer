@@ -35,6 +35,7 @@ namespace ReDrawer
 		{
 			_gamedata = gamedata;
 			_points = new List<Vector2>();
+			_gamedata.ShowMarker = false;
 		}
 
 		public void ProcessInput(BaseEventData data)
@@ -44,6 +45,13 @@ namespace ReDrawer
 			if (pointerData == null)
 			{
 				return;
+			}
+
+			SetMarkerPosition(pointerData.position, _gamedata, Camera.main);
+
+			if (!_gamedata.ShowMarker)
+			{
+				_gamedata.ShowMarker = true;
 			}
 
 			if (pointerData.clickTime > _lastInputTime)
@@ -57,8 +65,6 @@ namespace ReDrawer
 			{
 				return;
 			}
-
-			Debug.LogFormat("clickTime:{0}", pointerData.clickTime);
 
 			float distance = 0f;
 
@@ -76,7 +82,6 @@ namespace ReDrawer
 					_totalDistance += distance;
 
 					float distanceToFirstPoint = Vector2.Distance(_points[0], _points[_points.Count - 1]);
-					Debug.LogFormat("points :{0} distance:{1} distance to first point:{2}", _points.Count, _totalDistance, distanceToFirstPoint);
 
 					if (distanceToFirstPoint < Constants.MaxCloseDistance
 						&&
@@ -103,6 +108,21 @@ namespace ReDrawer
 					}
 				}
 			}
+		}
+
+		public void EndInput()
+		{
+			Reset();
+			_gamedata.ShowMarker = false;
+		}
+
+		private void SetMarkerPosition(Vector2 screenPosition, GameData gamedata, Camera camera)
+		{
+			Vector3 screenPos3d = screenPosition;
+			screenPos3d.z = gamedata.OriginalFigureGO.transform.position.z - camera.transform.position.z;
+			Vector3 markerPos = camera.ScreenToWorldPoint(screenPos3d);
+			markerPos.z -= 1 * Mathf.Sign(screenPos3d.z);
+			gamedata.InputMarkerPosition = markerPos;
 		}
 
 		private bool ScoredFigure()
@@ -217,11 +237,6 @@ namespace ReDrawer
 			_points.Clear();
 			_totalDistance = 0f;
 			_ignore = false;
-		}
-
-		public void Update()
-		{
-
 		}
 	}
 }

@@ -19,6 +19,7 @@ namespace ReDrawer
 			base.OnActivate();
 			_gameWorld = new GameWorld(GameData.Instance);
 			_view.OnDrag += _gameWorld.Input;
+			_view.OnPointerUp += _gameWorld.EndInput;
 			_gameWorld.OnScore += _view.SetScore;
 		}
 
@@ -26,6 +27,7 @@ namespace ReDrawer
 		{
 			base.OnDeactivate();
 			_view.OnDrag -= _gameWorld.Input;
+			_view.OnPointerUp -= _gameWorld.EndInput;
 		}
 
 		public override ViewBase GetView()

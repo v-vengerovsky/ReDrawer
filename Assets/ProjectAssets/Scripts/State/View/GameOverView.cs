@@ -10,6 +10,10 @@ namespace ReDrawer
 	{
 		[SerializeField]
 		private Button _restartBtn;
+		[SerializeField]
+		private Text _scoreText;
+
+		private int _score;
 
 		private event Action _onRestartPressed;
 
@@ -17,6 +21,16 @@ namespace ReDrawer
 		{
 			add { _onRestartPressed += value; }
 			remove { _onRestartPressed -= value; }
+		}
+
+		public int Score
+		{
+			get { return _score; }
+			set
+			{
+				_score = value;
+				_scoreText.text = string.Format(Constants.ScoreFormat,_score);
+			}
 		}
 
 		private void Awake()
