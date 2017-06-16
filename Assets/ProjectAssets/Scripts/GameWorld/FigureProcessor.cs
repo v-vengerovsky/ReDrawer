@@ -14,7 +14,7 @@ namespace ReDrawer
 		public FigureProcessor(GameData gamedata)
 		{
 			_gamedata = gamedata;
-			_screenSettings = new ScreenSettings(Camera.main, _gamedata.OriginalFigureGO);
+			_screenSettings = new ScreenSettings(Camera.main, _gamedata);
 		}
 
 		public void ShowFigureToDraw(Figure figure)
@@ -27,7 +27,7 @@ namespace ReDrawer
 			float width = screenSettings.ScreenWidth - 2 * screenSettings.ScreenOffset;
 			float height = screenSettings.ScreenHeight - 2 * screenSettings.ScreenOffset;
 
-			List<Vector3> points = Utils.GetNormalizedPointsXY(figure.Points,width,height);
+			List<Vector3> points = Utils.GetFittedRatioPointsXY(figure.Points,width,height);
 
 			return points;
 		}

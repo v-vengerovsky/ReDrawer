@@ -18,13 +18,14 @@ namespace ReDrawer
 		public float ScreenHeight { get { return _screenHeight; } }
 		public float ScreenOffset { get { return _screenOffset; } }
 
-		public ScreenSettings(Camera camera, GameObject target)
+		public ScreenSettings(Camera camera, GameData gamedata)
 		{
 			Vector3 targetPos = camera.transform.position;
-			targetPos.z = target.transform.position.z;
-			target.transform.position = targetPos;
+			targetPos.z = gamedata.OriginalFigureGO.transform.position.z;
+			gamedata.OriginalFigureGO.transform.position = targetPos;
+			gamedata.UserFigureGO.transform.position = gamedata.OriginalFigureGO.transform.position;
 
-			float depth = target.transform.position.z - camera.transform.position.z;
+			float depth = gamedata.OriginalFigureGO.transform.position.z - camera.transform.position.z;
 			Vector3 topRight = camera.ViewportToWorldPoint(new Vector3(1, 1, depth));
 			Vector3 bottomLeft = camera.ViewportToWorldPoint(new Vector3(0, 0, depth));
 			_screenWith = topRight.x - bottomLeft.x;

@@ -48,6 +48,7 @@ namespace ReDrawer
 			}
 			set
 			{
+				_userFigure.positionCount = value.Count;
 				_userFigure.SetPositions(value.ToArray());
 			}
 		}

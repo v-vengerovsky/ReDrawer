@@ -20,6 +20,8 @@ namespace ReDrawer
 			_figures = _figureLoader.LoadFigures();
 			_figureProcessor = new FigureProcessor(_gameData);
 			_inputProcessor = new InputProcessor(_gameData);
+			_inputProcessor.OnScored += ScoredFigure;
+			_inputProcessor.OnFailed += FailedToScoreFigure;
 			ShowRandomFigure();
 		}
 
@@ -31,6 +33,17 @@ namespace ReDrawer
 		public void Update()
 		{
 			_inputProcessor.Update();
+		}
+
+		private void ScoredFigure()
+		{
+			ShowRandomFigure();
+			Debug.LogWarning("ScoreFigure");
+		}
+
+		private void FailedToScoreFigure()
+		{
+			Debug.LogWarning("FailedToScoreFigure");
 		}
 
 		private void ShowRandomFigure()

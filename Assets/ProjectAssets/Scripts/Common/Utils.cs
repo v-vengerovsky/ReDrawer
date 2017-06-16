@@ -39,19 +39,62 @@ namespace ReDrawer
 			}
 		}
 
-		public static List<Vector3> GetNormalizedPointsXY(List<Vector2> points2d, float width, float height)
+		public static float GetPerimeter(List<Vector3> points)
+		{
+			float perimeter = 0f;
+
+			for (int i = 0; i < points.Count; i++)
+			{
+				Vector3 segment;
+
+				if (i < points.Count - 1)
+				{
+					segment = points[i + 1] - points[i];
+				}
+				else
+				{
+					segment = points[0] - points[i];
+				}
+
+				perimeter += segment.magnitude;
+			}
+
+			return perimeter;
+		}
+
+		public static List<Vector3> GetStretchedPointsXY(List<Vector2> points2d, float width, float height)
+		{
+			return GetNormalizedPointsXY(points2d, width, height, true);
+		}
+
+		public static List<Vector3> GetStretchedPointsXY(List<Vector3> points, float width, float height)
+		{
+			return GetNormalizedPointsXY(points, width, height, true);
+		}
+
+		public static List<Vector3> GetFittedRatioPointsXY(List<Vector2> points2d, float width, float height)
+		{			
+			return GetNormalizedPointsXY(points2d, width, height, false);
+		}
+
+		public static List<Vector3> GetFittedRatioPointsXY(List<Vector3> points, float width, float height)
+		{
+			return GetNormalizedPointsXY(points, width, height, false);
+		}
+
+		public static List<Vector3> GetNormalizedPointsXY(List<Vector2> points2d, float width, float height, bool stretch)
 		{
 			List<Vector3> points = new List<Vector3>();
 
-			foreach (var item in points)
+			foreach (var item in points2d)
 			{
 				points.Add(item);
 			}
 
-			return GetNormalizedPointsXY(points, width, height);
+			return GetNormalizedPointsXY(points, width, height, stretch);
 		}
 
-		public static List<Vector3> GetNormalizedPointsXY(List<Vector3> points, float width, float height)
+		public static List<Vector3> GetNormalizedPointsXY(List<Vector3> points, float width, float height, bool stretch)
 		{
 			List<Vector3> result = new List<Vector3>();
 
@@ -74,15 +117,18 @@ namespace ReDrawer
 			float xOffset = minX;
 			float yOffset = minY;
 
-			if (figureRatio > screenRatio)
+			if (!stretch)
 			{
-				yCoef *= screenRatio / figureRatio;
-				halfHeight *= screenRatio / figureRatio;
-			}
-			else
-			{
-				xCoef *= figureRatio / screenRatio;
-				halfWidth *= figureRatio / screenRatio;
+				if (figureRatio > screenRatio)
+				{
+					yCoef *= screenRatio / figureRatio;
+					halfHeight *= screenRatio / figureRatio;
+				}
+				else
+				{
+					xCoef *= figureRatio / screenRatio;
+					halfWidth *= figureRatio / screenRatio;
+				}
 			}
 
 			Vector3 temp;
