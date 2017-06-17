@@ -8,18 +8,18 @@ namespace ReDrawer
 {
 	public class FigureProcessor
 	{
-		private GameData _gamedata;
+		private IFigureDisplay _figureDisplay;
 		private ScreenSettings _screenSettings;
 
-		public FigureProcessor(GameData gamedata)
+		public FigureProcessor(IFigureDisplay figureDisplay)
 		{
-			_gamedata = gamedata;
-			_screenSettings = new ScreenSettings(Camera.main, _gamedata);
+			_figureDisplay = figureDisplay;
+			_screenSettings = new ScreenSettings(Camera.main, _figureDisplay,null);
 		}
 
 		public void ShowFigureToDraw(Figure figure)
 		{
-			_gamedata.OriginalPoints = GetScaledFigurePoints(figure,_screenSettings);
+			_figureDisplay.FigurePoints = GetScaledFigurePoints(figure,_screenSettings);
 		}
 
 		private List<Vector3> GetScaledFigurePoints(Figure figure, ScreenSettings screenSettings)

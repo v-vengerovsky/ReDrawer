@@ -51,6 +51,11 @@ namespace ReDrawer
 			_scoreSysytem.Update();
 		}
 
+		public void Dispose()
+		{
+			_gameData.ClearMarkers();
+		}
+
 		private void ScoredFigure()
 		{
 			ShowRandomFigure();

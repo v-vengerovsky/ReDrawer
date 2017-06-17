@@ -119,7 +119,7 @@ namespace ReDrawer
 		private void SetMarkerPosition(Vector2 screenPosition, GameData gamedata, Camera camera)
 		{
 			Vector3 screenPos3d = screenPosition;
-			screenPos3d.z = gamedata.OriginalFigureGO.transform.position.z - camera.transform.position.z;
+			screenPos3d.z = gamedata.FigureGO.transform.position.z - camera.transform.position.z;
 			Vector3 markerPos = camera.ScreenToWorldPoint(screenPos3d);
 			markerPos.z -= 1 * Mathf.Sign(screenPos3d.z);
 			gamedata.InputMarkerPosition = markerPos;
@@ -127,7 +127,7 @@ namespace ReDrawer
 
 		private bool ScoredFigure()
 		{
-			List<Vector3> originalPoints = _gamedata.OriginalPoints;
+			List<Vector3> originalPoints = _gamedata.FigurePoints;
 			float perimeter = Utils.GetPerimeter(originalPoints);
 			float inputPerimeter = 0f;
 

@@ -18,6 +18,13 @@ namespace ReDrawer
 		{
 			base.OnActivate();
 			_view.Score = _score;
+			_view.OnRestartPressed += Restart;
+		}
+
+		public override void OnDeactivate()
+		{
+			base.OnDeactivate();
+			_view.OnRestartPressed -= Restart;
 		}
 
 		public override ViewBase GetView()
@@ -26,10 +33,9 @@ namespace ReDrawer
 			return _view;
 		}
 
-		public override void Update()
+		private void Restart()
 		{
-			base.Update();
-
+			Approot.Instance.SetState(new PlayState());
 		}
 	}
 }

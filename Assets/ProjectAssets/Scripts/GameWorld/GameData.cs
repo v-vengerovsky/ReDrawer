@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ReDrawer
 {
-	public class GameData : MonoBehaviour
+	public class GameData : MonoBehaviour,IFigureDisplay
 	{
 		[SerializeField]
 		private LineRenderer _originalFigure;
@@ -47,7 +47,7 @@ namespace ReDrawer
 
 					for (int i = _usedInputMarkers.Count - 1; i >= 0; i--)
 					{
-						if (_usedInputMarkers[i].isStopped)
+						if (!_usedInputMarkers[i].IsAlive())
 						{
 							Destroy(_usedInputMarkers[i].gameObject);
 							_usedInputMarkers.RemoveAt(i);
@@ -57,10 +57,10 @@ namespace ReDrawer
 			}
 		}
 
-		public GameObject OriginalFigureGO { get { return _originalFigure.gameObject; } }
+		public GameObject FigureGO { get { return _originalFigure.gameObject; } }
 		public GameObject UserFigureGO { get { return _userFigure.gameObject; } }
 
-		public List<Vector3> OriginalPoints
+		public List<Vector3> FigurePoints
 		{
 			get
 			{
@@ -89,6 +89,16 @@ namespace ReDrawer
 			{
 				_userFigure.positionCount = value.Count;
 				_userFigure.SetPositions(value.ToArray());
+			}
+		}
+
+		public void ClearMarkers()
+		{
+			_usedInputMarkers.Add(_userInputMarker);
+			for (int i = _usedInputMarkers.Count - 1; i >= 0; i--)
+			{
+				Destroy(_usedInputMarkers[i].gameObject);
+				_usedInputMarkers.RemoveAt(i);
 			}
 		}
 

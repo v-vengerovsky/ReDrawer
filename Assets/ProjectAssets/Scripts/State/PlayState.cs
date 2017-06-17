@@ -28,6 +28,7 @@ namespace ReDrawer
 			base.OnDeactivate();
 			_view.OnDrag -= _gameWorld.Input;
 			_view.OnPointerUp -= _gameWorld.EndInput;
+			_gameWorld.Dispose();
 		}
 
 		public override ViewBase GetView()
