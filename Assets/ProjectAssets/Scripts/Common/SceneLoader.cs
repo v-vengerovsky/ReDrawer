@@ -17,7 +17,9 @@ public class SceneData
 	public string SceneName;
 }
 
+#if UNITY_EDITOR
 [InitializeOnLoad]
+#endif
 public class SceneLoader : MonoBehaviour
 {
 	private readonly List<string> _excludeSceneNames = new List<string>() { "Main.unity"};
